@@ -10,3 +10,8 @@ sqoop import \
     --as-avrodatafile \
     --target-dir /atlas/analytics/ATLASatHOME/production \
     -m 1
+
+rc=$?; if [[ $rc != 0 ]]; then 
+    echo "problem with sqoop. Exiting."
+    exit $rc
+fi
