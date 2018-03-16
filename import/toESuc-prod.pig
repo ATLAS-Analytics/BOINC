@@ -1,7 +1,7 @@
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
-REGISTER '/elasticsearch-hadoop-6.1.1/dist/elasticsearch-hadoop-pig-6.1.1.jar';
+REGISTER '/elasticsearch-hadoop-6.2.2/dist/elasticsearch-hadoop-pig-6.2.2.jar';
 
 define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://atlas-kibana.mwt2.org:9200','es.mapping.id=result_id');
 
