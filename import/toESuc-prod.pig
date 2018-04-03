@@ -1,9 +1,15 @@
 REGISTER '/usr/lib/pig/piggybank.jar' ;
 REGISTER '/usr/lib/pig/lib/avro-*.jar';
 
-REGISTER '/elasticsearch-hadoop-6.2.2/dist/elasticsearch-hadoop-pig-6.2.2.jar';
+REGISTER '/elasticsearch-hadoop/elasticsearch-hadoop-pig.jar';
 
-define EsStorage org.elasticsearch.hadoop.pig.EsStorage('es.nodes=http://atlas-kibana.mwt2.org:9200','es.mapping.id=result_id');
+define EsStorage org.elasticsearch.hadoop.pig.EsStorage(
+    'es.nodes=http://es-head01.mwt2.org,http://es-head02.mwt2.org,http://es-head03.mwt2.org',
+    'es.port=9200',
+    'es.mapping.id=result_id',
+    'es.http.timeout=5m'
+    );
+
 
 PAN = LOAD '/atlas/analytics/ATLASatHOME/production' USING AvroStorage();
 DESCRIBE PAN;
