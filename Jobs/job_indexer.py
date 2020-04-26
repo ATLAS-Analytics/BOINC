@@ -1,6 +1,6 @@
 import os
 import sys
-import cx_Oracle
+import mysql.connector
 import estools
 import conversions
 
@@ -23,15 +23,17 @@ print('Start date:', start_date, '\t End date:', end_date)
 
 user = os.environ['BOINC_USER']
 passw = os.environ['BOINC_PASS']
-conn = os.environ['BOINC_CONNECTION_STRING'].replace('jdbc:oracle:thin:@//', '')
-con = cx_Oracle.connect(user + '/' + passw + '@' + conn)
-print(con.version)
+conn = os.environ['BOINC_CONNECTION_STRING']
+mydb = mysql.connector.connect(host=conn, user=user, passwd=passw)
+print(mydb)
 
+cursor = mydb.cursor()
 
-cursor = con.cursor()
-not_stored_anymore = ['MAXCPUUNIT', 'MAXDISKUNIT', 'IPCONNECTIVITY', 'MINRAMUNIT', 'PRODDBUPDATETIME', 'NINPUTFILES']
-print('omitting columns:', not_stored_anymore)
+sel = "SELECT * FROM analyticsTable WHERE outcome!=0"
+sel += " AND STATECHANGETIME >= TO_DATE('" + start_date + \
+    "','YYYY - MM - DD HH24: MI: SS') AND STATECHANGETIME < TO_DATE('" + end_date + "','YYYY - MM - DD HH24: MI: SS') "
 
+print(sel)
 
 columns = [
     'PANDAID', 'JOBDEFINITIONID', 'SCHEDULERID', 'PILOTID', 'CREATIONTIME', 'CREATIONHOST', 'MODIFICATIONTIME',
@@ -73,14 +75,8 @@ escolumns = [
     'pilottiming', 'memory_leak', 'resource_type', 'diskio'
 ]
 
-sel = 'SELECT '
-sel += ','.join(columns)
-sel += ' FROM ATLAS_PANDA.JOBSARCHIVED4 '
-# sel += 'WHERE PANDAID=4225560422'
-sel += "WHERE STATECHANGETIME >= TO_DATE('" + start_date + \
-    "','YYYY - MM - DD HH24: MI: SS') AND STATECHANGETIME < TO_DATE('" + end_date + "','YYYY - MM - DD HH24: MI: SS') "
+# sel += ','.join(columns)
 
-# print(sel)
 
 cursor.execute(sel)
 

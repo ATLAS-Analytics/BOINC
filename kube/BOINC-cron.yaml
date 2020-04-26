@@ -13,7 +13,7 @@ spec:
           containers:
             - name: boinc-collector
               image: atlasanalyticsservice/boinc:latest
-              command: ["run.sh"]
+              command: ["Jobs/run.sh"]
               env:
                 - name: BOINC_USER
                   valueFrom:
