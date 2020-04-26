@@ -1,0 +1,48 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: boinc-collector
+spec:
+  schedule: "23 */1 * * *"
+  suspend: false
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: boinc-collector
+              image: atlasanalyticsservice/boinc:latest
+              command: ["run.sh"]
+              env:
+                - name: BOINC_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: boinc-secret
+                      key: boinc_user
+                - name: BOINC_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: boinc-secret
+                      key: boinc_pass
+                - name: BOINC_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      name: boinc-secret
+                      key: boinc_connection_string
+                - name: ES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_user
+                - name: ES_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_pass
+                - name: ES_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_host
+          restartPolicy: Never
