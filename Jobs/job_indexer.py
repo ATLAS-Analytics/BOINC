@@ -2,7 +2,6 @@ import os
 import sys
 import mysql.connector
 import estools
-import conversions
 
 if not 'BOINC_CONNECTION_STRING' in os.environ:
     print('Connection to ORACLE DB not configured. Please set variable: BOINC_CONNECTION_STRING ')
@@ -23,7 +22,7 @@ print('Start date:', start_date, '\t End date:', end_date)
 
 user = os.environ['BOINC_USER']
 passw = os.environ['BOINC_PASS']
-conn = os.environ['BOINC_CONNECTION_STRING']
+conn = os.environ['BOINC_CONNECTION_STRING']  # should be: dbod-sixtrack.cern.ch:3306
 mydb = mysql.connector.connect(host=conn, user=user, passwd=passw)
 print(mydb)
 
